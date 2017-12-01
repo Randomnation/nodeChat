@@ -6,13 +6,19 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "aws-sdk": "^2.157.0",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
+    "dateformat": "^3.0.2",
     "debug": "~2.6.3",
+    "dynamodb": "^1.0.0",
     "express": "~4.15.2",
     "jade": "~1.11.0",
+    "mongodb": "latest",
     "morgan": "~1.8.1",
+    "redis": "latest",
     "serve-favicon": "~2.4.2",
-    "socket.io": "latest"
+    "socket.io": "latest",
+    "socket.io.users": "latest"
   }
 }

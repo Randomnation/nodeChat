@@ -62,7 +62,7 @@ io.on('connection', function(socket) {
 
             fs.writeFile('./public/conversation.json', JSON.stringify(convObjects), 'utf-8', function(err){
                 if(err) throw err
-                console.log('Done!');
+                console.log('Added to JSON file!');
             });
         });
         
@@ -82,29 +82,29 @@ io.on('connection', function(socket) {
             if(err) {
                 console.error("Unable to add conversation. Error JSON: ", JSON.stringify(err, null, 2));
             } else {
-                console.log("Added conversation: ", JSON.stringify(data, null, 2));
+                console.log("Added conversation to: ", table);
             }
         });
 
         // Read from DynamoDB -- TEST --
-        var testName = "Jason";
-        var testDate = "\"December 1st, 2017, 6:02:26 PM\"";
+        // var testName = "Jason";
+        // var testDate = "\"December 1st, 2017, 6:02:26 PM\"";
 
-        var tparams = {
-            TableName: table,
-            Key:{
-                "name": testName,
-                "date": testDate
-            }
-        };
+        // var tparams = {
+        //     TableName: table,
+        //     Key:{
+        //         "name": testName,
+        //         "date": testDate
+        //     }
+        // };
 
-        docClient.get(tparams, function(err, data){
-            if(err) {
-                console.error("Unable to retrieve message. Error JSON: ", JSON.stringify(err, null, 2));
-            } else {
-                console.log("Successfully retrieved message: ", JSON.stringify(data, null, 2));
-            }
-        });
+        // docClient.get(tparams, function(err, data){
+        //     if(err) {
+        //         console.error("Unable to retrieve message. Error JSON: ", JSON.stringify(err, null, 2));
+        //     } else {
+        //         console.log("Successfully retrieved message: ", JSON.stringify(data, null, 2));
+        //     }
+        // });
 
     });
 

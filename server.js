@@ -27,12 +27,20 @@ app.set('views', __dirname + '/tpl');
 app.set('view engine', "jade");
 app.engine('jade', require('jade').__express);
 app.get("/", function(req, res){
-    res.render("page");
+    res.render("page", { pageData: { test: "users" } });
 });
 
 
 // Chatroom
 var numUsers = 0;
+
+
+// Rooms
+// var nsp = io.of('/my-namespace');
+// nsp.on('connection', function(socket) {
+//     console.log('Someone connected');
+//     nsp.emit('hi', 'Hello everyone!');
+// });
 
 
 io.on('connection', function(socket) {
@@ -85,26 +93,6 @@ io.on('connection', function(socket) {
                 console.log("Added conversation to: ", table);
             }
         });
-
-        // Read from DynamoDB -- TEST --
-        // var testName = "Jason";
-        // var testDate = "\"December 1st, 2017, 6:02:26 PM\"";
-
-        // var tparams = {
-        //     TableName: table,
-        //     Key:{
-        //         "name": testName,
-        //         "date": testDate
-        //     }
-        // };
-
-        // docClient.get(tparams, function(err, data){
-        //     if(err) {
-        //         console.error("Unable to retrieve message. Error JSON: ", JSON.stringify(err, null, 2));
-        //     } else {
-        //         console.log("Successfully retrieved message: ", JSON.stringify(data, null, 2));
-        //     }
-        // });
 
     });
 

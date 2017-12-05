@@ -4,9 +4,10 @@ doctype
 html
     head
         title= "Pyweb chat"
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
         link(rel="stylesheet" href="/stylesheets/style.css")
         script(src='/javascripts/jquery-3.2.1.min.js')
-        script(src='/chat.js')
+        script(src='/client.js')
         script(src='/socket.io/socket.io.js')
 
     body
@@ -14,6 +15,9 @@ html
             li(class="chat page")
                 div(class="chatArea")
                     ul(class="messages")
+                div(class="userList")
+                    ul
+                        li #{pageData.test}
                 input(class="inputMessage" placeholder="Type here...")
             li(class="login page")
                 div(class="form")

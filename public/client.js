@@ -12,7 +12,9 @@ $(function() {
     var $usernameInput = $('.usernameInput'); // Input for username
     var $messages = $('.messages'); // Messages area
     var $inputMessage = $('.inputMessage'); // Input message input box
-  
+    // var $roomInput = $('.roomInput'); // Room input
+    // var $usersOnline = $('.usersOnline'); // Div for online users
+
     var $loginPage = $('.login.page'); // The login page
     var $chatPage = $('.chat.page'); // The chatroom page
   
@@ -23,8 +25,15 @@ $(function() {
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
   
+    // Rooms
     var socket = io();
+    // var socket = io('/my-namespace');
+  //   socket.on('hi', function(data) {
+  //     document.body.innerHTML = '';
+  //     document.write(data);
+  //  });
   
+
     function addParticipantsMessage (data) {
       var message = '';
       if (data.numUsers === 1) {
@@ -73,7 +82,7 @@ $(function() {
       var $el = $('<li>').addClass('log').text(message);
       addMessageElement($el, options);
     }
-  
+
     // Adds the visual chat message to the message list
     function addChatMessage (data, options) {
       // Don't fade the message in if there is an 'X was typing'
@@ -143,7 +152,7 @@ $(function() {
       }
       $messages[0].scrollTop = $messages[0].scrollHeight;
     }
-  
+
     // Prevents input from having injected markup
     function cleanInput (input) {
       return $('<div/>').text(input).html();

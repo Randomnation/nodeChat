@@ -10,6 +10,7 @@ $(function() {
     // Initialize variables
     var $window = $(window);
     var $usernameInput = $('.usernameInput'); // Input for username
+    var $passwordInput = $('.passwordInput'); // Input for password
     var $messages = $('.messages'); // Messages area
     var $inputMessage = $('.inputMessage'); // Input message input box
     // var $roomInput = $('.roomInput'); // Room input
@@ -18,8 +19,9 @@ $(function() {
     var $loginPage = $('.login.page'); // The login page
     var $chatPage = $('.chat.page'); // The chatroom page
   
-    // Prompt for setting a username
+    // Prompt for setting a username/login details
     var username;
+    var password;
     var connected = false;
     var typing = false;
     var lastTypingTime;

@@ -6,8 +6,10 @@ html
         title= "Pyweb chat"
         link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")
         link(rel="stylesheet" href="/stylesheets/style.css")
+        link(rel="stylesheet" href="/stylesheets/modal.css")
         script(src='/javascripts/jquery-3.2.1.min.js')
         script(src='/client.js')
+        script(src='/javascripts/modal.js')
         script(src='/socket.io/socket.io.js')
 
     body
@@ -21,5 +23,15 @@ html
                 input(class="inputMessage" placeholder="Type here...")
             li(class="login page")
                 div(class="form")
-                    h3(class="title") What's your nickname?
+                    h3(class="title") Username
                     input(class="usernameInput" type="text" maxlenght="14")
+                    h3(class="title") Password
+                    input(class="passwordInput" type="text" maxlenght="14")
+                    br
+                    br
+                    div#myModal.modal
+                        <!-- Modal content -->
+                        div.modal-content
+                            span.close &times
+                            p Some text in the Modal..
+                    button#myBtn Open Modal

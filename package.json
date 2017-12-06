@@ -19,6 +19,7 @@
     "redis": "latest",
     "serve-favicon": "~2.4.2",
     "socket.io": "latest",
-    "socket.io.users": "latest"
+    "socket.io.users": "latest",
+    "vanilla-modal": "^1.6.5"
   }
 }

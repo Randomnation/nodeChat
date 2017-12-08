@@ -27,20 +27,12 @@ app.set('views', __dirname + '/tpl');
 app.set('view engine', "jade");
 app.engine('jade', require('jade').__express);
 app.get("/", function(req, res){
-    res.render("page", { pageData: { test: "users" } });
+    res.render("page");
 });
 
 
 // Chatroom
 var numUsers = 0;
-
-
-// Rooms
-// var nsp = io.of('/my-namespace');
-// nsp.on('connection', function(socket) {
-//     console.log('Someone connected');
-//     nsp.emit('hi', 'Hello everyone!');
-// });
 
 
 io.on('connection', function(socket) {
@@ -52,7 +44,7 @@ io.on('connection', function(socket) {
         var now = new Date();
         var date = JSON.stringify(dateFormat(now, "mmmm dS, yyyy, h:MM:ss TT"));
         socket.broadcast.emit('new message', {
-            user: username,
+            username: username,
             message: msg
 
         });
@@ -61,7 +53,7 @@ io.on('connection', function(socket) {
         fs.readFile('./public/conversation.json', 'utf-8', function(err, data){
             if(err) throw err
 
-            var convObjects = JSON.parse(data)
+            var convObjects = JSON.parse(data);
             convObjects.convs.push({
                 name: username,
                 msg: msg,

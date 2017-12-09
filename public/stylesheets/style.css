@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+::-webkit-scrollbar { 
+  display: none; 
+}
+
 html {
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
@@ -49,7 +53,15 @@ ul {
 /* Login Page */
 
 .login.page {
-  background-color: #000;
+  /* background-color: #000; */
+  background: rgba(73,155,234,1);
+  background: -moz-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(73,155,234,1)), color-stop(100%, rgba(32,124,229,1)));
+  background: -webkit-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  background: -o-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  background: -ms-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  background: linear-gradient(to bottom, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499bea', endColorstr='#207ce5', GradientType=0 );
 }
 
 .login.page .form {
@@ -120,14 +132,19 @@ ul {
 
 .chatArea {
   height: 100%;
-  padding-bottom: 60px;
+  padding: 0 0 60px 0;
+  overflow: hidden;
 }
 
 .messages {
   height: 100%;
-  margin: 0;
+  margin: 10px;
   overflow-y: scroll;
   padding: 10px 20px 10px 20px;
+}
+
+.messageBody {
+  margin-left: 2em;
 }
 
 .message.typing .messageBody {
@@ -138,13 +155,21 @@ ul {
   font-weight: 700;
   overflow: hidden;
   padding-right: 15px;
-  text-align: right;
+  text-align: left;
 }
 
 /* Input */
 
 .inputMessage {
-  border: 10px solid #000;
+  /* border: 10px solid #000; */
+  border: 10px solid rgba(73,155,234,1);
+  border: 10px solid -moz-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  border: 10px solid -webkit-gradient(left top, left bottom, color-stop(0%, rgba(73,155,234,1)), color-stop(100%, rgba(32,124,229,1)));
+  border: 10px solid -webkit-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  border: 10px solid -o-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  border: 10px solid -ms-linear-gradient(top, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  border: 10px solid linear-gradient(to bottom, rgba(73,155,234,1) 0%, rgba(32,124,229,1) 100%);
+  /* filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499bea', endColorstr='#207ce5', GradientType=0 ); */
   bottom: 0;
   height: 60px;
   left: 0;

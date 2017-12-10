@@ -82,6 +82,7 @@ ul {
   padding-bottom: 15px;
   text-align: center;
   width: 400px;
+  border-radius: 0;
 }
 
 .login.page .title {
@@ -113,12 +114,21 @@ ul {
 
 /* Font */
 
-.messages {
-  font-size: 150%;
+@media (min-width: 1px) {
+  .messages {
+    font-size: 100%;
+  }
+  .inputMessage {
+    font-size: 80%;
+  }
 }
-
-.inputMessage {
-  font-size: 100%;
+@media (min-width: 768px) {
+  .messages {
+    font-size: 150%;
+  }
+  .inputMessage {
+    font-size: 100%;
+  }
 }
 
 .log {
@@ -131,8 +141,9 @@ ul {
 /* Messages */
 
 .chatArea {
-  height: 100%;
+  min-height: 100%;
   padding: 0 0 60px 0;
+  margin: 0 0 -60px 0;
   overflow: hidden;
 }
 
@@ -145,10 +156,17 @@ ul {
 
 .messageBody {
   margin-left: 2em;
+  min-width: 100%;
+  width: 100%;
 }
 
 .message.typing .messageBody {
   color: gray;
+}
+
+.message {
+  min-width: 100%;
+  width: 100%;
 }
 
 .username {
@@ -175,7 +193,17 @@ ul {
   left: 0;
   outline: none;
   padding-left: 10px;
-  position: absolute;
+  position: fixed;
   right: 0;
   width: 100%;
+  border-radius: 0;
+}
+
+.container,
+.container-fluid {
+  min-height: 100%;
+}
+
+table {
+  margin-bottom: 60px;
 }

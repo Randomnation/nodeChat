@@ -21,6 +21,9 @@ $(function() {
   var connected = false;
   var typing = false;
   var lastTypingTime;
+  var lastChatMessage = {};
+  var welcomeDisplayed = false;
+  var inputFocus = false;
   var $currentInput = $usernameInput.focus();
 
   var socket = io();
@@ -70,7 +73,9 @@ $(function() {
 
   // Log a message
   function log (message, options) {
-    var $el = $('<li>').addClass('log').text(message);
+    var $el = $('<tr></tr>').addClass("message");
+    var $msg = $('<td colspan="2"></td>').addClass('log').addClass('text-center').text(message);
+    $el.append($msg);
     addMessageElement($el, options);
   }
 
@@ -84,14 +89,14 @@ $(function() {
       $typingMessages.remove();
     }
 
-    var $usernameDiv = $('<span class="username"/>')
+    var $usernameDiv = $('<td class="username"></td>')
       .text(data.username)
       .css('color', getUsernameColor(data.username));
-    var $messageBodyDiv = $('<span class="messageBody">')
+    var $messageBodyDiv = $('<td class="messageBody"></td>')
       .text(data.message);
 
     var typingClass = data.typing ? 'typing' : '';
-    var $messageDiv = $('<li class="message"/>')
+    var $messageDiv = $('<tr class="message"></tr>')
       .data('username', data.username)
       .addClass(typingClass)
       .append($usernameDiv, $messageBodyDiv);
@@ -141,7 +146,7 @@ $(function() {
     } else {
       $messages.append($el);
     }
-    $messages[0].scrollTop = $messages[0].scrollHeight;
+    window.scrollTo(0, document.querySelector('.messages').clientHeight);
   }
 
   // Prevents input from having injected markup
@@ -229,15 +234,59 @@ $(function() {
   socket.on('login', function (data) {
     connected = true;
     // Display the welcome message
-    var message = "Welcome Pyweb Chat!";
-    log(message, {
-      prepend: true
-    });
+    if (!welcomeDisplayed) {
+      var message = "Welcome To Pyweb Chat!";
+      log(message, {
+        prepend: true
+      });
+      welcomeDisplayed = true;
+    }
     addParticipantsMessage(data);
+  });
+
+  // Whenever the server emits 'catch up', add the missing messages to the chat
+  socket.on('catch up', function(data) {
+    var output = [];
+    var found = false;
+    var equal = false;
+    var convs = data.convs;
+
+    if (!Object.keys(lastChatMessage).length) {
+      output = convs;
+    } else {
+      for (var i = 0; i < convs.length; i++) {
+        if (!found 
+          && convs[i].username == lastChatMessage.username 
+          && convs[i].message == lastChatMessage.message 
+          && convs[i].date == lastChatMessage.date) {
+            found = true;
+            equal = true;
+        }
+        if (!equal && found) {
+          output.push(convs[i]);
+        }
+
+        equal = false;
+      }
+
+      if (!found && output.length === 0) {
+        output = convs;
+      }
+    }
+
+    // Push the messages onto the chat stream
+    for (var i = 0; i < output.length; i++) {
+      addChatMessage(output[i]);
+    };
+
+    // Set the last chat message to the latest in the conversation.json
+    lastChatMessage = convs[convs.length - 1];
+    //console.log(lastChatMessage);
   });
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function (data) {
+    lastChatMessage = data;
     addChatMessage(data);
   });
 
@@ -266,6 +315,7 @@ $(function() {
 
   socket.on('disconnect', function () {
     log('you have been disconnected');
+    $inputMessage.prop('disabled', true);
   });
 
   socket.on('reconnect', function () {
@@ -273,6 +323,7 @@ $(function() {
     if (username) {
       socket.emit('add user', username);
     }
+    $inputMessage.prop('disabled', false);
   });
 
   socket.on('reconnect_error', function () {

@@ -103,6 +103,7 @@ ul {
 
 .chat.page {
   display: none;
+
 }
 
 .userList {
@@ -143,7 +144,7 @@ ul {
 .chatArea {
   min-height: 100%;
   padding: 0 0 60px 0;
-  margin: 0 0 -60px 0;
+  margin: 60px 0 -60px 0;
   overflow: hidden;
 }
 
@@ -223,4 +224,11 @@ table {
 
 .navbar-white {
   background-color: white;
+}
+
+/* Used to force load the webfonts */
+div.fake-hidden {
+  width:0px;
+  height:0px;
+  overflow:hidden;
 }

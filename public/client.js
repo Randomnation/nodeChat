@@ -21,6 +21,7 @@ $(function() {
   var inputFocus = false;
   var $currentInput = $usernameInput.focus();
   var $participantBadge = $('#participants');
+  var $disconnectBadge = $('#disconnect');
 
   var socket = io();
 
@@ -306,20 +307,24 @@ $(function() {
   });
 
   socket.on('disconnect', function () {
-    log('you have been disconnected');
+    log('connection lost');
+    $disconnectBadge.removeClass('d-none');
+    $participantBadge.addClass('d-none');
     $inputMessage.prop('disabled', true);
   });
 
   socket.on('reconnect', function () {
-    log('you have been reconnected');
+    log('connection established');
     if (username) {
       socket.emit('add user', username);
     }
+    $disconnectBadge.addClass('d-none');
+    $participantBadge.removeClass('d-none');
     $inputMessage.prop('disabled', false);
   });
 
   socket.on('reconnect_error', function () {
-    log('attempt to reconnect has failed');
+    // log('attempt to reconnect has failed');
   });
 
 });

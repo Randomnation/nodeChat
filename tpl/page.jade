@@ -8,16 +8,21 @@ html
 
         link(rel="stylesheet" href="/stylesheets/bootstrap.min.css")      
         link(rel="stylesheet" href="/stylesheets/style.css")
+        link(rel="stylesheet" href="/stylesheets/fontawesome-all.min.css")  
         script(src='/javascripts/jquery-3.2.1.min.js')
         script(src='/client.js')
         script(src='/socket.io/socket.io.js')
 
     body
+        div.fake-hidden
+            i.fa.fa-square-o.fa-3x
         ul.pages
             li.chat.page
                 nav.navbar.fixed-top.navbar-white
                     a.navbar-brand Welcome To Pyweb Chat!
                     span.navbar-text
+                        span#disconnect(style="margin-right: 10px;").d-none
+                            i.fa.fa-exclamation-triangle.text-warning
                         span#participants.badge-pill.badge-light
                 div.container-fluid
                     div.row

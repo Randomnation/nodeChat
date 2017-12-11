@@ -174,6 +174,19 @@ ul {
   overflow: hidden;
   padding-right: 15px;
   text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 1px) {
+  .username {
+    max-width: 100px;
+  }
+}
+@media (min-width: 768px) {
+  .username {
+    max-width: 200px;
+  }
 }
 
 /* Input */

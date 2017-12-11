@@ -7,7 +7,7 @@ var io = require('socket.io')(server);
 var port = process.env.port || 8070;
 var fs = require('fs');
 var dateFormat = require('dateformat');
-
+var convs = [];
 
 AWS.config.update({
     region: "us-west-2",
@@ -22,7 +22,14 @@ function readSettings() {
 }
 
 function readChatLog() {
-    var _chatLog = JSON.parse(fs.readFileSync('./public/conversation.json'));
+    try {
+        var _chatLog = JSON.parse(fs.readFileSync('./public/conversation.json'));
+    } catch (err) {
+        console.log('No conversation.json file found, creating...');
+        writeMessagesToFile(convs);
+        var _chatLog = convs;
+    };
+
     return _chatLog;
 }
 
@@ -30,9 +37,18 @@ var settings = readSettings();
 
 server.listen(port, function() {
     console.log('Server listening at port %d', port);
+    
     setInterval(function() {
         settings = readSettings();
     }, 1000);
+
+    setInterval(function() {
+        if (settings.File) {
+            writeMessagesToFile(convs);
+        }
+    }, 5000);
+
+    convs = readChatLog();
 });
 
 // Routing
@@ -47,30 +63,39 @@ app.get("/", function(req, res){
 // Chatroom
 var numUsers = 0;
 
-
 io.on('connection', function(socket) {
     var addedUser = false;
     
-    socket.emit('catch up', readChatLog());
+    socket.emit('catch up', convs);
 
     // Client emits 'new message', this listens then executes
     socket.on('new message', function(msg, username) {
         var username = socket.username;
         var now = new Date();
         var date = JSON.stringify(dateFormat(now, "mmmm dS, yyyy, h:MM:ss TT"));
-        socket.broadcast.emit('new message', {
+        var chatMsg = {
             username: username,
             message: msg,
             date: date
-        });
+        }
+
+        socket.broadcast.emit('new message', chatMsg);
         
-        if (settings.File) {
-            writeMessageToFile(username, msg, date);
+        convs.push(chatMsg);
+
+        // Limit the conversations array to the settings.Storage value
+        if (convs.length > settings.Storage) {
+            var iterate = convs.length - settings.Storage;
+            for (var i = 0; i < iterate; i++) {
+                convs.shift();
+            }
         }
 
         if (settings.Database) {
             writeMessageToDB(username, msg, date);
         }
+
+        console.log('message added to feed - conversation count: ', convs.length);
     });
 
     //Client emits 'add user', this listens then executes
@@ -114,22 +139,9 @@ io.on('connection', function(socket) {
 });
 
 // Write to JSON File
-// TODO: Needs an if not exist on the file
-function writeMessageToFile(username, msg, date) {
-    fs.readFile('./public/conversation.json', 'utf-8', function(err, data){
+function writeMessagesToFile(convs) {
+    fs.writeFile('./public/conversation.json', JSON.stringify(convs), 'utf-8', function(err){
         if(err) throw err
-
-        var convObjects = JSON.parse(data);
-        convObjects.convs.push({
-            username: username,
-            message: msg,
-            date: date
-        })
-
-        fs.writeFile('./public/conversation.json', JSON.stringify(convObjects), 'utf-8', function(err){
-            if(err) throw err
-            console.log('Added to JSON file!');
-        });
     });
 }
 
@@ -154,10 +166,4 @@ function writeMessageToDB(username, msg, date) {
             console.log("Added conversation to: ", table);
         }
     });
-}
-
-function restoreLatestConversation() {
-    var _convs = JSON.parse(fs.readFileSync('./public/conversation.json'));
-    console.log(_convs);
-    return _convs;
 }

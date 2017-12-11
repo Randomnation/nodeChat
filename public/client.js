@@ -1,11 +1,6 @@
 $(function() {
   var FADE_TIME = 150; // ms
   var TYPING_TIMER_LENGTH = 400; // ms
-  var COLORS = [
-    '#e21400', '#91580f', '#f8a700', '#f78b00',
-    '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
-    '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
-  ];
 
   // Initialize variables
   var $window = $(window);
@@ -91,7 +86,8 @@ $(function() {
 
     var $usernameDiv = $('<td class="username"></td>')
       .text(data.username)
-      .css('color', getUsernameColor(data.username));
+      .prop('title', data.username)
+      .css('color', getUsernameColour(data.username));
     var $messageBodyDiv = $('<td class="messageBody"></td>')
       .text(data.message);
 
@@ -182,15 +178,20 @@ $(function() {
   }
 
   // Gets the color of a username through our hash function
-  function getUsernameColor (username) {
+  function getUsernameColour (username) {
     // Compute hash code
-    var hash = 7;
+    var hash = 3; // dunno these colours looked good lel
+
     for (var i = 0; i < username.length; i++) {
-       hash = username.charCodeAt(i) + (hash << 5) - hash;
+       hash = username.charCodeAt(i) + ((hash << 5) - hash);
     }
-    // Calculate color
-    var index = Math.abs(hash % COLORS.length);
-    return COLORS[index];
+    
+    var c = (hash & 0x00FFFFFF)
+    .toString(16)
+    .toUpperCase();
+
+    var colour = '#' + "00000".substring(0, 6 - c.length) + c;
+    return colour;
   }
 
   // Keyboard events
@@ -215,6 +216,10 @@ $(function() {
   $inputMessage.on('input', function() {
     updateTyping();
   });
+
+  $usernameInput.on('input', function() {
+    $usernameInput.css('color', getUsernameColour(this.value));
+  })
 
   // Click events
 
@@ -245,11 +250,10 @@ $(function() {
   });
 
   // Whenever the server emits 'catch up', add the missing messages to the chat
-  socket.on('catch up', function(data) {
+  socket.on('catch up', function(convs) {
     var output = [];
     var found = false;
     var equal = false;
-    var convs = data.convs;
 
     if (!Object.keys(lastChatMessage).length) {
       output = convs;

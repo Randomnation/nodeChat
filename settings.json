@@ -1,5 +1,5 @@
 {
-    "File": true,
+    "File": true, 
     "Database": false,
-    "PreviousLines": 100
+    "Storage": 1000
 }

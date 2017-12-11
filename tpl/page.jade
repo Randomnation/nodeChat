@@ -3,7 +3,7 @@
 doctype html
 html
     head
-        title Pyweb chat
+        title Pyweb Chat
         meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
 
         link(rel="stylesheet" href="/stylesheets/bootstrap.min.css")      
@@ -15,6 +15,10 @@ html
     body
         ul.pages
             li.chat.page
+                nav.navbar.fixed-top.navbar-white
+                    a.navbar-brand Welcome To Pyweb Chat!
+                    span.navbar-text
+                        span#participants.badge-pill.badge-light
                 div.container-fluid
                     div.row
                         div.col

@@ -20,17 +20,12 @@ $(function() {
   var welcomeDisplayed = false;
   var inputFocus = false;
   var $currentInput = $usernameInput.focus();
+  var $participantBadge = $('#participants');
 
   var socket = io();
 
-  function addParticipantsMessage (data) {
-    var message = '';
-    if (data.numUsers === 1) {
-      message += "there's 1 participant";
-    } else {
-      message += "there are " + data.numUsers + " participants";
-    }
-    log(message);
+  function addParticipants (data) {
+    $participantBadge.text(data.numUsers + " connected");
   }
 
   // Sets the client's username
@@ -142,6 +137,7 @@ $(function() {
     } else {
       $messages.append($el);
     }
+    
     window.scrollTo(0, document.querySelector('.messages').clientHeight);
   }
 
@@ -235,18 +231,11 @@ $(function() {
 
   // Socket events
 
-  // Whenever the server emits 'login', log the login message
+  // Whenever the server emits 'login', update the participants
   socket.on('login', function (data) {
     connected = true;
-    // Display the welcome message
-    if (!welcomeDisplayed) {
-      var message = "Welcome To Pyweb Chat!";
-      log(message, {
-        prepend: true
-      });
-      welcomeDisplayed = true;
-    }
-    addParticipantsMessage(data);
+    addParticipants(data);
+    window.scrollTo(0, document.querySelector('.messages').clientHeight);
   });
 
   // Whenever the server emits 'catch up', add the missing messages to the chat
@@ -285,7 +274,6 @@ $(function() {
 
     // Set the last chat message to the latest in the conversation.json
     lastChatMessage = convs[convs.length - 1];
-    //console.log(lastChatMessage);
   });
 
   // Whenever the server emits 'new message', update the chat body
@@ -297,13 +285,13 @@ $(function() {
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function (data) {
     log(data.username + ' joined');
-    addParticipantsMessage(data);
+    addParticipants(data);
   });
 
   // Whenever the server emits 'user left', log it in the chat body
   socket.on('user left', function (data) {
     log(data.username + ' left');
-    addParticipantsMessage(data);
+    addParticipants(data);
     removeChatTyping(data);
   });
 

@@ -220,3 +220,7 @@ ul {
 table {
   margin-bottom: 60px;
 }
+
+.navbar-white {
+  background-color: white;
+}

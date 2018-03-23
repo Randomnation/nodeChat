@@ -9,6 +9,9 @@ var fs = require('fs');
 var dateFormat = require('dateformat');
 var convs = [];
 var clientList = [];
+var nodemailer = require('nodemailer');
+var creds = require('./credentials');
+
 
 AWS.config.update({
     region: "us-west-2",
@@ -64,6 +67,21 @@ app.get("/", function(req, res){
 // Chatroom
 var numUsers = 0;
 
+// Mailing details
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: creds.gmailE,
+        pass: creds.gmailP
+    }
+});
+var mailOptions = {
+    from: 'no-reply@pyweb.com.au',
+    to: 'ravelnze@icloud.com, krammtacular@gmail.com',
+    subject: 'New Chat alert',
+    text: 'This was totally sent to you by the node chat server!'
+};
+
 io.on('connection', function(socket) {
     var addedUser = false;
     
@@ -80,9 +98,18 @@ io.on('connection', function(socket) {
             date: date
         }
 
+
         socket.broadcast.emit('new message', chatMsg);
         
         convs.push(chatMsg);
+
+        transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        })
 
         // Limit the conversations array to the settings.Storage value
         if (convs.length > settings.Storage) {

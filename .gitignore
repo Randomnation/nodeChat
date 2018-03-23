@@ -2,3 +2,4 @@ node_modules/
 .idea/
 public/conversation.json
 shared-local-instance.db
+credentials.js

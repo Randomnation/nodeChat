@@ -16,6 +16,7 @@
     "jade": "~1.11.0",
     "mongodb": "latest",
     "morgan": "~1.8.1",
+    "nodemailer": "^4.6.3",
     "redis": "latest",
     "serve-favicon": "~2.4.2",
     "socket.io": "latest",

@@ -8,10 +8,12 @@ html
 
         link(rel="stylesheet" href="/stylesheets/bootstrap.min.css")      
         link(rel="stylesheet" href="/stylesheets/style.css")
-        link(rel="stylesheet" href="/stylesheets/fontawesome-all.min.css")  
+        link(rel="stylesheet" href="/stylesheets/fontawesome-all.min.css")
         script(src='/javascripts/jquery-3.2.1.min.js')
+        script(src='/javascripts/bootstrap.min.js')
         script(src='/client.js')
         script(src='/socket.io/socket.io.js')
+        script(src='/javascripts/custom.js')
 
     body
         div.fake-hidden
@@ -23,15 +25,15 @@ html
                     span.navbar-text
                         span#disconnect(style="margin-right: 10px;").d-none
                             i.fa.fa-exclamation-triangle.text-warning
-                        span#participants.badge-pill.badge-light
+                        span#participants(data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?").badge-pill.badge-light
                 div.container-fluid
                     div.row
                         div.col
                             div.chatArea
                                 table
                                     tbody.messages
-                input.inputMessage(placeholder="Type here...")
+                input#message.inputMessage(placeholder="Type here...")
             li.login.page
                 div.form
                     h3.title What's your nickname?
-                    input.usernameInput(type="text" maxlenght="14")
+                    input#username.usernameInput(type="text" maxlenght="14")

@@ -8,6 +8,7 @@ var port = process.env.PORT || 8070;
 var fs = require('fs');
 var dateFormat = require('dateformat');
 var convs = [];
+var clientList = [];
 
 AWS.config.update({
     region: "us-west-2",
@@ -105,16 +106,20 @@ io.on('connection', function(socket) {
         //store the username in the socket session for this client
         socket.username = username;
         ++numUsers;
+        clientList.push(username);
         addedUser = true;
         socket.emit('login', {
-            numUsers: numUsers
+            numUsers: numUsers,
+            clientList: clientList
         });
 
         // globablly echo (all clients) that a person has connected
         socket.broadcast.emit('user joined', {
             username: socket.username,
-            numUsers: numUsers
+            numUsers: numUsers,
+            clientList: clientList
         });
+
     });
 
     // when client emits 'typing', broadcast to others
@@ -129,10 +134,14 @@ io.on('connection', function(socket) {
         if(addedUser) {
             --numUsers;
 
+            var index = clientList.indexOf(socket.username);
+            clientList.splice(index, 1);
+
             // globally echo that this client has left
             socket.broadcast.emit('user left', {
                 username: socket.username,
-                numUsers: numUsers   
+                numUsers: numUsers,  
+                clientList: clientList
             });
         }
     });

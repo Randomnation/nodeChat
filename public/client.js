@@ -11,8 +11,10 @@ $(function() {
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
 
+
   // Prompt for setting a username
   var username;
+  var clientList;
   var connected = false;
   var typing = false;
   var lastTypingTime;
@@ -26,6 +28,7 @@ $(function() {
   var socket = io();
 
   function addParticipants (data) {
+    clientList = data.clientList;
     $participantBadge.text(data.numUsers + " connected");
   }
 
@@ -46,7 +49,7 @@ $(function() {
   }
 
   // Sends a chat message
-  function sendMessage () {
+  function sendMessage (data) {
     var message = $inputMessage.val();
     // Prevent markup from being injected into the message
     message = cleanInput(message);
@@ -60,7 +63,9 @@ $(function() {
       // tell server to execute 'new message' and send along one parameter
       socket.emit('new message', message);
     }
+
   }
+
 
   // Log a message
   function log (message, options) {
@@ -193,7 +198,7 @@ $(function() {
 
   // Keyboard events
 
-  $window.keydown(function (event) {
+  $window.keydown(function (event, data) {
     // Auto-focus the current input when a key is typed
     if (!(event.ctrlKey || event.metaKey || event.altKey)) {
       $currentInput.focus();
@@ -201,7 +206,7 @@ $(function() {
     // When the client hits ENTER on their keyboard
     if (event.which === 13) {
       if (username) {
-        sendMessage();
+        sendMessage(data);
         socket.emit('stop typing');
         typing = false;
       } else {
